@@ -31,7 +31,7 @@ def date_scrape():
         }
     s = r[0].strip()[:3].lower()
     r[0] = m[s]
-    r = datetime.date(int(r[2]),int(r[0]),int(r[1]))
+    r = datetime.datetime(int(r[2]),int(r[0]),int(r[1]))
 
     return(r)
 
