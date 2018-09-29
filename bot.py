@@ -10,11 +10,6 @@ TOKEN = read_data
 
 client = discord.Client()
 
-def create_user(discord_id, discord_name):
-    connection = getConnection()
-    cursor = connection.cursor()
-    cursor.execute("INSERT INTO datUsers(DiscordID, DiscordName) VALUES (" + discord_id + ", '" + discord_name +"');")
-    connection.commit()
 
 def enter_score(discord_id, discord_name, score, date, isArchive):
     #find the user by their discord ID
