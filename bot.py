@@ -46,23 +46,29 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith('!crossword'):
-        time = str(message.content).split("!crossword ",1)
-        time = time[1]
-        #try:
-        time = time_to_number(str(time))
-        score_entered = enter_score(message.author.id, message.author.name,time,date_scrape(), False)
-        if score_entered == 1:
-            msg = 'Hello {0.author.mention}, we have logged your score of '+str(time)+' seconds.'
-            msg = msg.format(message)
-            await client.send_message(message.channel, msg)
+    #The bot will listen to either !crossword or !archive commands in chat
+    if message.content.startswith('!crossword') or message.content.startswith('!archive'):
+        if message.content.startswith('!crossword'):
+            time = str(message.content).split("!crossword ",1)
+            archive = False
         else:
-            msg = 'Hello {0.author.mention}, we have already logged a score for you, today. Please play again, tomorrow.'
-            msg = msg.format(message)
+            time = str(message.content).split("!archive ",1)
+            archive = True
+        time = time[1]
+        try:
+            time = time_to_number(str(time)) #Calls a function to convert "hh:mm:ss" to integer seconds
+            score_entered = enter_score(message.author.id, message.author.name,time,date_scrape(), archive) #Attempts to actual enter the score into the database
+            if score_entered == 1:
+                msg = 'Hello {0.author.mention}, we have logged your score of '+str(time)+' seconds.'
+                msg = msg.format(message)
+                await client.send_message(message.channel, msg)
+            else:
+                msg = 'Hello {0.author.mention}, something went wrong and we could not record your score.'
+                msg = msg.format(message)
+                await client.send_message(message.channel, msg)
+        except:
+            msg = "Hello {0.author.mention}, I didn't understand that.".format(message)
             await client.send_message(message.channel, msg)
-        #except:
-        #    msg = "Hello {0.author.mention}, I didn't understand that.".format(message)
-        #    await client.send_message(message.channel, msg)
 
 @client.event
 async def on_ready():
