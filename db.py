@@ -1,5 +1,6 @@
 import pyodbc
 import datetime
+from bot_functions import *
 def getConnection():
     return pyodbc.connect('Driver={SQL Server};Server=den1.mssql6.gear.host;Database=crossnerd;UID=crossnerd;PWD=powerj@@;')
 
@@ -51,3 +52,18 @@ def update_date_to_now(discord_id, isArchive):
     else:
         cursor.execute("UPDATE datUsers SET LastCrossword = ? WHERE DiscordID = ?", (datetime.datetime.now(), discord_id))
     connection.commit()
+
+def get_last_date(discord_id, isArchive):
+    user = select_user_by_id(discord_id)
+    user_id = user[0]['UserID']
+    connection = getConnection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT TOP 1 * FROM datScores WHERE userID = ? AND isArchive = ? ORDER BY datScores.Day DESC", user_id, int(isArchive))
+    results = build_dict(cursor)
+    return results[0]['Day']
+
+def date_compare(date1, date2):
+    if(date1.date() == date2.date()):
+        return True
+    else:
+        return False
