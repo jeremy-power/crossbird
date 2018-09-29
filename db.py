@@ -36,4 +36,9 @@ def create_score(discord_id, score, date, isArchive):
     cursor.execute("INSERT INTO datScores(Score, UserID, Day, DateRecorded, isArchive) VALUES (?, ?, ?, ?, ?)",
                   (score, user_id, date, datetime.datetime.now(), int(isArchive)))
     cursor.commit()
-create_score(1, 10, datetime.datetime.now(), True)
+    
+def create_user(discord_id, discord_name):
+    connection = getConnection()
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO datUsers(DiscordID, DiscordName) VALUES (" + discord_id + ", '" + discord_name +"');")
+    connection.commit()
