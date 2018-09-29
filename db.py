@@ -60,7 +60,10 @@ def get_last_date(discord_id, isArchive):
     cursor = connection.cursor()
     cursor.execute("SELECT TOP 1 * FROM datScores WHERE userID = ? AND isArchive = ? ORDER BY datScores.Day DESC", user_id, int(isArchive))
     results = build_dict(cursor)
-    return results[0]['Day']
+    if len(results) == 0:
+        return datetime.datetime(1900,1,1)
+    else:
+        return results[0]['Day']
 
 def date_compare(date1, date2):
     if(date1.date() == date2.date()):

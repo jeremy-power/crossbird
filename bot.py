@@ -25,13 +25,13 @@ def enter_score(discord_id, discord_name, score, date, isArchive):
     if len(user) != 0:
         #if it does, add the score
         if(isArchive):
-            if(date_compare(get_last_date(discord_id, isArchive), date_scrape())):
+            if not (date_compare(get_last_date(discord_id, isArchive), date_scrape())):
                 create_score(discord_id, score, date, isArchive)
                 return 1
             else:
                 return 0
         else:
-            if(date_compare(get_last_date(discord_id, isArchive), date_scrape())):
+            if not (date_compare(get_last_date(discord_id, isArchive), date_scrape())):
                 create_score(discord_id, score, date, isArchive)
                 return 1
             else:
@@ -57,7 +57,7 @@ async def on_message(message):
         time = time[1]
         try:
             time = time_to_number(str(time)) #Calls a function to convert "hh:mm:ss" to integer seconds
-            score_entered = enter_score(message.author.id, message.author.name,time,date_scrape(), archive) #Attempts to actual enter the score into the database
+            score_entered = enter_score(message.author.id, message.author.display_name,time,date_scrape(), archive) #Attempts to actual enter the score into the database
             if score_entered == 1:
                 msg = 'Hello {0.author.mention}, we have logged your score of '+str(time)+' seconds.'
                 msg = msg.format(message)
