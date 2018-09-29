@@ -24,8 +24,18 @@ def enter_score(discord_id, discord_name, score, date, isArchive):
     user = select_user_by_id(discord_id)
     if len(user) != 0:
         #if it does, add the score
-        create_score(discord_id, score, date, isArchive)
-        return 1
+        if(isArchive):
+            if(user[0]['LastArchive'].date() != datetime.datetime.today().date()):
+                create_score(discord_id, score, date, isArchive)
+                return 1
+            else:
+                return 0
+        else:
+            if(user[0]['LastCrossword'].date() != datetime.datetime.today().date()):
+                create_score(discord_id, score, date, isArchive)
+                return 1
+            else:
+                return 0
     else:
         return 0
 

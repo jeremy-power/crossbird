@@ -36,9 +36,18 @@ def create_score(discord_id, score, date, isArchive):
     cursor.execute("INSERT INTO datScores(Score, UserID, Day, DateRecorded, isArchive) VALUES (?, ?, ?, ?, ?)",
                   (score, user_id, date, datetime.datetime.now(), int(isArchive)))
     cursor.commit()
+    update_date_to_now(discord_id, isArchive)
     
 def create_user(discord_id, discord_name):
     connection = getConnection()
     cursor = connection.cursor()
     cursor.execute("INSERT INTO datUsers(DiscordID, DiscordName) VALUES (" + discord_id + ", '" + discord_name +"');")
+    connection.commit()
+def update_date_to_now(discord_id, isArchive):
+    connection = getConnection()
+    cursor = connection.cursor()
+    if(isArchive):
+        cursor.execute("UPDATE datUsers SET LastArchive = ? WHERE DiscordID = ?", (datetime.datetime.now(), discord_id))
+    else:
+        cursor.execute("UPDATE datUsers SET LastCrossword = ? WHERE DiscordID = ?", (datetime.datetime.now(), discord_id))
     connection.commit()
