@@ -39,20 +39,20 @@ async def on_message(message):
     if message.content.startswith('!crossword'):
         time = str(message.content).split("!crossword ",1)
         time = time[1]
-        try:
-            time = time_to_number(str(time))
-            score_entered = enter_score(message.author.id,time,date_scrape())
-            if score_entered == 1:
-                msg = 'Hello {0.author.mention}, we have logged your score of '+str(time)+' seconds.'
-                msg = msg.format(message)
-                await client.send_message(message.channel, msg)
-            else:
-                msg = 'Hello {0.author.mention}, we have already logged a score for you, today. Please play again, tomorrow.'
-                msg = msg.format(message)
-                await client.send_message(message.channel, msg)
-        except:
-            msg = "Hello {0.author.mention}, I didn't understand that.".format(message)
+        #try:
+        time = time_to_number(str(time))
+        score_entered = enter_score(message.author.id, message.author.name,time,date_scrape(), False)
+        if score_entered == 1:
+            msg = 'Hello {0.author.mention}, we have logged your score of '+str(time)+' seconds.'
+            msg = msg.format(message)
             await client.send_message(message.channel, msg)
+        else:
+            msg = 'Hello {0.author.mention}, we have already logged a score for you, today. Please play again, tomorrow.'
+            msg = msg.format(message)
+            await client.send_message(message.channel, msg)
+        #except:
+        #    msg = "Hello {0.author.mention}, I didn't understand that.".format(message)
+        #    await client.send_message(message.channel, msg)
 
 @client.event
 async def on_ready():
