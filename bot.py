@@ -1,5 +1,6 @@
 # Work with Python 3.6
 import discord
+from bot_functions import *
 
 with open('token.txt') as f:
     read_data = f.read()
@@ -15,8 +16,16 @@ async def on_message(message):
         return
 
     if message.content.startswith('!crossword'):
-        msg = 'Hello {0.author.mention}'.format(message)
-        await client.send_message(message.channel, msg)
+        time = str(message.content).split("!crossword ",1)
+        time = time[1]
+        try:
+            time = time_to_number(str(time))
+            msg = 'Hello {0.author.mention}, we have logged your score of '+str(time)+' seconds.'
+            msg = msg.format(message)
+            await client.send_message(message.channel, msg)
+        except:
+            msg = "Hello {0.author.mention}, I didn't understand that.".format(message)
+            await client.send_message(message.channel, msg)
 
 @client.event
 async def on_ready():
