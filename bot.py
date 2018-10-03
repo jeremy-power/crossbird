@@ -1,13 +1,12 @@
+__author__ = "Jeremy Power and Logan Groves"
+
 # Work with Python 3.6
 import discord
+import logging
 from bot_functions import *
 from db import *
 
-with open('token.txt') as f:
-    read_data = f.read()
-f.closed
-TOKEN = read_data
-
+TOKEN = get_token()
 client = discord.Client()
 
 
@@ -66,7 +65,8 @@ async def on_message(message):
                 msg = 'Hello {0.author.mention}, something went wrong and we could not record your score.'
                 msg = msg.format(message)
                 await client.send_message(message.channel, msg)
-        except:
+        except Exception as e:
+            logging.warning(e)
             msg = "Hello {0.author.mention}, I didn't understand that.".format(message)
             await client.send_message(message.channel, msg)
 

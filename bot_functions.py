@@ -1,3 +1,16 @@
+__author__ = "Jeremy Power and Logan Groves"
+
+import os
+
+def get_token():
+    script_path = os.path.dirname(__file__) #<-- absolute dir the script is in
+    file_path = "token.txt"
+    full_file_path = os.path.join(script_path, file_path)
+    with open(full_file_path) as f:
+        read_data = f.read()
+    f.closed
+    return read_data
+
 def date_scrape():
     import datetime
     import urllib3
