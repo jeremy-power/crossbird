@@ -1,6 +1,10 @@
 __author__ = "Jeremy Power and Logan Groves"
 
 import os
+import logging
+from db import *
+from messages import *
+
 
 def get_token():
     script_path = os.path.dirname(__file__) #<-- absolute dir the script is in
@@ -14,6 +18,7 @@ def get_token():
 def date_scrape():
     import datetime
     import urllib3
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     http = urllib3.PoolManager()
     r = http.request(
         'GET',
@@ -60,3 +65,32 @@ def time_to_number(time):
     else:
         time = -1
     return(time)
+
+
+def enter_score(discord_id, discord_name, score, date, isArchive):
+    #find the user by their discord ID
+    user = select_user_by_id(discord_id)
+    #if user doesn't exist yet, create one
+    if len(user) == 0:
+        create_user(discord_id, discord_name)
+    #otherwise if their name has changed, update it
+    elif user[0]['DiscordName'] != discord_name:
+        update_name(discord_id, discord_name)
+    #make sure user exists now
+    user = select_user_by_id(discord_id)
+    if len(user) != 0:
+        #if it does, add the score
+        if(isArchive):
+            if not (date_compare(get_last_date(discord_id, isArchive), date_scrape())):
+                create_score(discord_id, score, date, isArchive)
+                return 1
+            else:
+                return 0
+        else:
+            if not (date_compare(get_last_date(discord_id, isArchive), date_scrape())):
+                create_score(discord_id, score, date, isArchive)
+                return 1
+            else:
+                return 0
+    else:
+        return 0
