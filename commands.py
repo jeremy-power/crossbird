@@ -10,8 +10,15 @@ def define_commands():
                     '!archive' : enter_archive_command,
                     '!a' : enter_archive_command,
                     '!both' : enter_both_command,
-                    '!b' : enter_both_command}
+                    '!b' : enter_both_command,
+                    '!streak' : display_streak}
     return command_dict
+
+async def display_streak(param_array, message, client):
+    discord_id = message.author.id
+    streak = get_streak(discord_id)
+    await streak_message(client, message, streak)
+
 
 async def create_score_from_message(time, message, client, isArchive):
     try:

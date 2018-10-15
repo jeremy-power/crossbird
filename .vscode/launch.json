@@ -5,12 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File (Integrated Terminal)",
+            "name": "Python: Debug Console",
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "console": "integratedTerminal"
-        },
+            "console": "none"
+       },
         {
             "name": "Python: Attach",
             "type": "python",

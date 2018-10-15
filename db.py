@@ -64,3 +64,17 @@ def date_compare(date1, date2):
         return True
     else:
         return False
+
+def update_streak(discord_id, isContinued):
+    cursor = connection.cursor()
+    if isContinued:
+        cursor.execute("UPDATE datUsers SET Streak = Streak + 1 WHERE DiscordID = ?", discord_id)
+    else:
+        cursor.execute("UPDATE datUsers SET Streak = 1 WHERE DiscordID = ?", discord_id)
+
+def get_streak(discord_id):
+    cursor = connection.cursor()
+    cursor.execute("SELECT TOP 1 * FROM datUsers WHERE DiscordID = ?", discord_id)
+    results = build_dict(cursor)
+    user_streak = results[0]['Streak']
+    return user_streak

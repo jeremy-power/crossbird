@@ -69,6 +69,7 @@ def time_to_number(time):
 
 def enter_score(discord_id, discord_name, score, date, isArchive):
     #find the user by their discord ID
+    current_crossword_date = date_scrape()
     user = select_user_by_id(discord_id)
     #if user doesn't exist yet, create one
     if len(user) == 0:
@@ -81,16 +82,24 @@ def enter_score(discord_id, discord_name, score, date, isArchive):
     if len(user) != 0:
         #if it does, add the score
         if(isArchive):
-            if not (date_compare(get_last_date(discord_id, isArchive), date_scrape())):
+            if not (date_compare(get_last_date(discord_id, isArchive), current_crossword_date)):
                 create_score(discord_id, score, date, isArchive)
                 return 1
             else:
                 return 0
         else:
-            if not (date_compare(get_last_date(discord_id, isArchive), date_scrape())):
+            if not (date_compare(get_last_date(discord_id, isArchive), current_crossword_date)):
+                check_streak(discord_id, current_crossword_date)
                 create_score(discord_id, score, date, isArchive)
                 return 1
             else:
                 return 0
     else:
         return 0
+
+def check_streak(discord_id, current_crossword_date):
+    last_date = get_last_date(discord_id, False)
+    if (last_date.date() == (current_crossword_date - datetime.timedelta(days=1)).date()):
+        update_streak(discord_id, True)
+    else:
+        update_streak(discord_id, False)
