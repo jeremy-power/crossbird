@@ -1,20 +1,13 @@
-import unittest
 
-class TestStringMethods(unittest.TestCase):
-
-    def test_upper(self):
-        self.assertEqual('foo'.upper(), 'FOO')
-
-    def test_isupper(self):
-        self.assertTrue('FOO'.isupper())
-        self.assertFalse('Foo'.isupper())
-
-    def test_split(self):
-        s = 'hello world'
-        self.assertEqual(s.split(), ['hello', 'world'])
-        # check that s.split fails when the separator is not a string
-        with self.assertRaises(TypeError):
-            s.split(2)
-
-if __name__ == '__main__':
-    unittest.main()
+def time_to_number(time):
+    time = time.split(':')
+    time_len = len(time)
+    if time_len == 1:
+        time = int(time[0])
+    elif time_len == 2:
+        time = int(time[0])*60+int(time[1])
+    elif time_len == 3:
+        time = int(time[0])*3600+int(time[1])*60+int(time[2])
+    else:
+        time = -1
+    return(time)

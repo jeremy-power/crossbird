@@ -104,5 +104,6 @@ venv.bak/
 .mypy_cache/
 
 token.txt
+db.txt
 crossbird-key.pem
 crossbird-key.ppk

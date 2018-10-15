@@ -11,26 +11,23 @@ def define_commands():
                     '!a' : enter_archive_command,
                     '!both' : enter_both_command,
                     '!b' : enter_both_command,
-                    '!streak' : display_streak}
+                    '!streak' : display_streak,
+                    '!how' : display_help,
+                    '!where' : display_link,
+                    '!nyt' : display_link}
     return command_dict
+
+async def display_link(param_array, message, client):
+    await where_message(client, message)
+
+async def display_help(param_array, message, client):
+    await help_message(client, message)
 
 async def display_streak(param_array, message, client):
     discord_id = message.author.id
     streak = get_streak(discord_id)
     await streak_message(client, message, streak)
 
-
-async def create_score_from_message(time, message, client, isArchive):
-    try:
-        time = time_to_number(str(time)) #Calls a function to convert "hh:mm:ss" to integer seconds
-        score_entered = enter_score(message.author.id, message.author.display_name,time,date_scrape(), isArchive) #Attempts to actual enter the score into the database
-        if score_entered == 1:
-            await success_message(client, message, time)
-        else:
-            await score_error(client, message)
-    except Exception as e:
-        logging.warning(e)
-        await output_error(client, message)
 
 async def enter_crossword_command(param_array, message, client):
     time = param_array[0]

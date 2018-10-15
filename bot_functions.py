@@ -103,3 +103,15 @@ def check_streak(discord_id, current_crossword_date):
         update_streak(discord_id, True)
     else:
         update_streak(discord_id, False)
+
+async def create_score_from_message(time, message, client, isArchive):
+    try:
+        time = time_to_number(str(time)) #Calls a function to convert "hh:mm:ss" to integer seconds
+        score_entered = enter_score(message.author.id, message.author.display_name,time,date_scrape(), isArchive) #Attempts to actual enter the score into the database
+        if score_entered == 1:
+            await success_message(client, message, time)
+        else:
+            await score_error(client, message)
+    except Exception as e:
+        logging.warning(e)
+        await output_error(client, message)

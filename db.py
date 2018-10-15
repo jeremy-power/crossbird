@@ -1,7 +1,17 @@
 import pyodbc
 import datetime
+import os
+def get_db_string():
+    script_path = os.path.dirname(__file__) #<-- absolute dir the script is in
+    file_path = "db.txt"
+    full_file_path = os.path.join(script_path, file_path)
+    with open(full_file_path) as f:
+        read_data = f.read()
+    f.closed
+    return read_data
+
 def get_connection():
-    return pyodbc.connect('Driver={SQL Server};Server=den1.mssql6.gear.host;Database=crossnerd;UID=crossnerd;PWD=powerj@@;')
+    return pyodbc.connect(get_db_string())
 
 connection = get_connection()
 

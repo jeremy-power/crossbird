@@ -26,7 +26,7 @@ async def on_message(message):
         try:
             await command_dict[command](command_params, message, client)
         except KeyError as e:
-            await output_error(client, message)
+            pass
         except Exception as e:
             await output_error(client, message)
             logging.warning(e)
