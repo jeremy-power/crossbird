@@ -14,8 +14,13 @@ def define_commands():
                     '!streak' : display_streak,
                     '!how' : display_help,
                     '!where' : display_link,
+                    '!scores' : display_scores,
                     '!nyt' : display_link}
     return command_dict
+
+async def display_scores(param_array, message, client):
+    score_string = await build_score_string(client, message)
+    await score_message(client, message, score_string)
 
 async def display_link(param_array, message, client):
     await where_message(client, message)
@@ -45,6 +50,18 @@ async def enter_both_command(param_array, message, client):
         await create_score_from_message(time, message, client, False)
         time = param_array[1]
         await create_score_from_message(time, message, client, True)
+    except Exception as e:
+        logging.warning(e)
+        await output_error(client, message)
+
+async def create_score_from_message(time, message, client, isArchive):
+    try:
+        time = time_to_number(str(time)) #Calls a function to convert "hh:mm:ss" to integer seconds
+        score_entered = enter_score(message.author.id, message.author.display_name,time,date_scrape(), isArchive) #Attempts to actual enter the score into the database
+        if score_entered == 1:
+            await success_message(client, message, time)
+        else:
+            await score_error(client, message)
     except Exception as e:
         logging.warning(e)
         await output_error(client, message)

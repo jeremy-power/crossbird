@@ -1,5 +1,4 @@
 import asyncio
-
 async def output_error(client, message):
     msg = "Hello {0.author.mention}, I didn't understand that.".format(message)
     msg = msg.format(message)
@@ -29,11 +28,23 @@ async def help_message(client, message):
 !archive, !a x:xx   - Saves your time for today\'s archive crossword.
 !both, !b c:cc a:aa - Saves your time for both crosswords at once.
 !streak             - Displays your current streak of completing the regular crossword on consecutive days.
-!where, !nyt        - Provides a link to the New York Times Crosswords. Archive is in bottom right corner.```"""
+!where, !nyt        - Provides a link to the New York Times Crosswords. Archive is in bottom right corner.
+!scores             - Creates a table with the scores of the day.
+```"""
     msg = msg.format(message)
     await client.send_message(message.channel, msg)
 
 async def where_message(client, message):
     msg = 'https://www.nytimes.com/crosswords'
+    msg = msg.format(message)
+    await client.send_message(message.channel, msg)
+
+async def no_scores(client, message):
+    msg = 'Sorry, there are no scores yet today!'
+    msg = msg.format(message)
+    await client.send_message(message.channel, msg)
+    
+async def score_message(client, message, score_string):
+    msg = score_string
     msg = msg.format(message)
     await client.send_message(message.channel, msg)

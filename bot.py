@@ -13,7 +13,6 @@ command_dict = define_commands()
 
 @client.event
 async def on_message(message):
-
     # we do not want the bot to reply to itself
     if message.author == client.user:
         return

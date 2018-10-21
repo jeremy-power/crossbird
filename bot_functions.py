@@ -5,7 +5,6 @@ import logging
 from db import *
 from messages import *
 
-
 def get_token():
     script_path = os.path.dirname(__file__) #<-- absolute dir the script is in
     file_path = "token.txt"
@@ -104,14 +103,37 @@ def check_streak(discord_id, current_crossword_date):
     else:
         update_streak(discord_id, False)
 
-async def create_score_from_message(time, message, client, isArchive):
-    try:
-        time = time_to_number(str(time)) #Calls a function to convert "hh:mm:ss" to integer seconds
-        score_entered = enter_score(message.author.id, message.author.display_name,time,date_scrape(), isArchive) #Attempts to actual enter the score into the database
-        if score_entered == 1:
-            await success_message(client, message, time)
-        else:
-            await score_error(client, message)
-    except Exception as e:
-        logging.warning(e)
-        await output_error(client, message)
+def seconds_to_minutes(seconds):
+    minutes = divmod(seconds, 60)
+    if minutes[1] < 10:
+        response = str(minutes[0]) + ":0" + str(minutes[1])
+    else:
+        response = str(minutes[0]) + ":" + str(minutes[1])
+    return response
+
+async def build_score_string(client, message):
+    score_dict = get_scores_today(date_scrape())
+    if not score_dict:
+        await no_scores(client, message)
+    else:
+        output_string = """```
+  Name         |  Crossword |   Archive
+----------------------------------------"""
+        for score in score_dict:
+            output_string += "\n "
+            output_string += '{:13}'.format(score['Name'][:13])
+            output_string += " |"
+            if score['CScore'] is not None:
+                output_string += seconds_to_minutes(score['CScore']).center(12, ' ')
+            else:
+                output_string += '{:12}'.format(" ")
+            output_string += "|" 
+            if score['AScore'] is not None:
+                output_string += '{:>8}'.format(seconds_to_minutes(score['AScore']))
+            else:
+                output_string += '{:>8}'.format(" ")
+        output_string += "```"
+    if len(output_string) > 2000:
+        output_string = output_string[:1997]
+        output_string += "```"
+    return output_string

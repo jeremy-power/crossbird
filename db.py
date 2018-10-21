@@ -1,6 +1,7 @@
 import pyodbc
 import datetime
 import os
+
 def get_db_string():
     script_path = os.path.dirname(__file__) #<-- absolute dir the script is in
     file_path = "db.txt"
@@ -11,7 +12,7 @@ def get_db_string():
     return read_data
 
 def get_connection():
-    return pyodbc.connect(get_db_string())
+    return pyodbc.connect(get_db_string(), autocommit=True)
 
 connection = get_connection()
 
@@ -88,3 +89,9 @@ def get_streak(discord_id):
     results = build_dict(cursor)
     user_streak = results[0]['Streak']
     return user_streak
+
+def get_scores_today(date):
+    cursor = connection.cursor()
+    cursor.execute("exec sp_BuildDateView ?", date)
+    results = build_dict(cursor)
+    return results
