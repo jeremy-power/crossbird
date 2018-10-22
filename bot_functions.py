@@ -111,8 +111,23 @@ def seconds_to_minutes(seconds):
         response = str(minutes[0]) + ":" + str(minutes[1])
     return response
 
-async def build_score_string(client, message):
-    score_dict = get_scores_today(date_scrape())
+async def build_streak_string(client, message):
+    streak_dict = get_streaks()
+    output_string = ""
+    if streak_dict:
+        output_string += """```
+  Name         |  Streak
+--------------------------"""
+        for streak in streak_dict:
+            output_string += "\n "
+            output_string += '{:13}'.format(streak['DiscordName'][:13])
+            output_string += " |"
+            output_string += '{:>5}'.format(str(streak['Streak']))
+        output_string += "```"
+    return output_string
+
+async def build_score_string(client, message, date):
+    score_dict = get_scores_for_day(date)
     if not score_dict:
         await no_scores(client, message)
     else:

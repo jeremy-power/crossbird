@@ -90,8 +90,14 @@ def get_streak(discord_id):
     user_streak = results[0]['Streak']
     return user_streak
 
-def get_scores_today(date):
+def get_scores_for_day(date):
     cursor = connection.cursor()
     cursor.execute("exec sp_BuildDateView ?", date)
+    results = build_dict(cursor)
+    return results
+
+def get_streaks():
+    cursor = connection.cursor()
+    cursor.execute("SELECT DiscordName, Streak FROM datUsers WHERE Streak > 1 ORDER BY Streak DESC")
     results = build_dict(cursor)
     return results

@@ -14,13 +14,23 @@ def define_commands():
                     '!streak' : display_streak,
                     '!how' : display_help,
                     '!where' : display_link,
-                    '!scores' : display_scores,
+                    '!scores' : display_scores_today,
+                    '!yesterday' : display_scores_yesterday,
+                    '!streaks' : display_streaks,
                     '!nyt' : display_link}
     return command_dict
 
-async def display_scores(param_array, message, client):
-    score_string = await build_score_string(client, message)
-    await score_message(client, message, score_string)
+async def display_scores_today(param_array, message, client):
+    score_string = await build_score_string(client, message, date_scrape())
+    await custom_message(client, message, score_string)
+
+async def display_streaks(param_array, message, client):
+    streak_string = await build_streak_string(message,client)
+    await custom_message(client, message, streak_string)
+
+async def display_scores_yesterday(param_array, message, client):
+    score_string = await build_score_string(client, message, date_scrape() - datetime.timedelta(days=1))
+    await custom_message(client, message, score_string)
 
 async def display_link(param_array, message, client):
     await where_message(client, message)

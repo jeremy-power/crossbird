@@ -16,7 +16,7 @@ async def on_message(message):
     # we do not want the bot to reply to itself
     if message.author == client.user:
         return
-
+    print(get_streaks())
     # breaks the user's message into parts
     command = message.content.split(" ")[0]
     command_params = message.content.split(" ")[1:]

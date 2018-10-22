@@ -44,7 +44,7 @@ async def no_scores(client, message):
     msg = msg.format(message)
     await client.send_message(message.channel, msg)
     
-async def score_message(client, message, score_string):
-    msg = score_string
+async def custom_message(client, message, custom_string):
+    msg = custom_string
     msg = msg.format(message)
     await client.send_message(message.channel, msg)
