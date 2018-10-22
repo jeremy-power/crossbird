@@ -126,8 +126,11 @@ async def build_streak_string(client, message):
         output_string += "```"
     return output_string
 
+
 async def build_score_string(client, message, date):
     score_dict = get_scores_for_day(date)
+    cscore_list = []
+    ascore_list = []
     if not score_dict:
         await no_scores(client, message)
     else:
@@ -140,14 +143,33 @@ async def build_score_string(client, message, date):
             output_string += " |"
             if score['CScore'] is not None:
                 output_string += seconds_to_minutes(score['CScore']).center(12, ' ')
+                cscore_list.append(score['CScore'])
             else:
                 output_string += '{:12}'.format(" ")
             output_string += "|" 
             if score['AScore'] is not None:
                 output_string += '{:>8}'.format(seconds_to_minutes(score['AScore']))
+                ascore_list.append(score['AScore'])
             else:
                 output_string += '{:>8}'.format(" ")
-        output_string += "```"
+        if((len(cscore_list) > 1) or (len(ascore_list) > 1)):
+            output_string += """ 
+----------------------------------------\n"""
+            output_string += '{:14}'.format(" Average")
+            output_string += " |"
+
+            if cscore_list:
+                cscore_average = int(round(sum(cscore_list)/len(cscore_list)))
+                output_string += seconds_to_minutes(cscore_average).center(12, ' ')
+            else:
+                output_string += '{:12}'.format(" ")
+            output_string += "|" 
+            if ascore_list:
+                ascore_average = int(round(sum(ascore_list)/len(ascore_list)))
+                output_string += '{:>8}'.format(seconds_to_minutes(ascore_average))
+            else:
+                output_string += '{:>8}'.format(" ")
+            output_string += "```"
     if len(output_string) > 2000:
         output_string = output_string[:1997]
         output_string += "```"
