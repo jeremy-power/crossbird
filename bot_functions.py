@@ -3,7 +3,6 @@ __author__ = "Jeremy Power and Logan Groves"
 import os
 import logging
 from db import *
-from messages import *
 
 def get_token():
     script_path = os.path.dirname(__file__) #<-- absolute dir the script is in
@@ -132,7 +131,7 @@ async def build_score_string(client, message, date):
     cscore_list = []
     ascore_list = []
     if not score_dict:
-        await no_scores(client, message)
+        return "Sorry, there are no scores yet today!"
     else:
         output_string = """```
   Name         |  Crossword |   Archive
@@ -169,7 +168,7 @@ async def build_score_string(client, message, date):
                 output_string += '{:>8}'.format(seconds_to_minutes(ascore_average))
             else:
                 output_string += '{:>8}'.format(" ")
-            output_string += "```"
+        output_string += "```"
     if len(output_string) > 2000:
         output_string = output_string[:1997]
         output_string += "```"

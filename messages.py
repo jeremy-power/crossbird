@@ -1,4 +1,5 @@
 import asyncio
+from bot_functions import seconds_to_minutes
 async def output_error(client, message):
     msg = "Hello {0.author.mention}, I didn't understand that.".format(message)
     msg = msg.format(message)
@@ -14,7 +15,11 @@ async def score_error(client, message):
     await client.delete_message(msg)
     
 async def success_message(client, message, time):
-    msg = 'Hello {0.author.mention}, we have logged your score of '+str(time)+' seconds.'
+    if time > 60:
+        time_string = seconds_to_minutes(time)
+    else:
+        time_string = str(time)+' seconds.'
+    msg = 'Hello {0.author.mention}, we have logged your score of ' + time_string
     msg = msg.format(message)
     await client.send_message(message.channel, msg)
 
