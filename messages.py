@@ -35,6 +35,7 @@ async def help_message(client, message):
 !streak             - Displays your current streak of completing the regular crossword on consecutive days.
 !where, !nyt        - Provides a link to the New York Times Crosswords. Archive is in bottom right corner.
 !scores             - Creates a table with the scores of the day.
+!joel               - Displays the current crossword day.
 ```"""
     msg = msg.format(message)
     await client.send_message(message.channel, msg)
@@ -51,5 +52,10 @@ async def no_scores(client, message):
     
 async def custom_message(client, message, custom_string):
     msg = custom_string
+    msg = msg.format(message)
+    await client.send_message(message.channel, msg)
+
+async def time_message(client, message, date):
+    msg = date.strftime("%B %d, %Y")
     msg = msg.format(message)
     await client.send_message(message.channel, msg)

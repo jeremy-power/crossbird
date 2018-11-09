@@ -17,8 +17,13 @@ def define_commands():
                     '!scores' : display_scores_today,
                     '!yesterday' : display_scores_yesterday,
                     '!streaks' : display_streaks,
-                    '!nyt' : display_link}
+                    '!nyt' : display_link,
+                    '!joel' : display_time}
     return command_dict
+
+async def display_time(param_array, message, client):
+    await time_message(client, message, date_scrape())
+    
 
 async def display_scores_today(param_array, message, client):
     score_string = await build_score_string(client, message, date_scrape())

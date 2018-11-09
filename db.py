@@ -101,3 +101,17 @@ def get_streaks():
     cursor.execute("SELECT DiscordName, Streak FROM datUsers WHERE Streak > 1 ORDER BY Streak DESC")
     results = build_dict(cursor)
     return results
+
+def update_joel_date(date):
+    cursor = connection.cursor()
+    cursor.execute("exec spRefreshCurrentJoelDay ?", date)
+
+def get_last_joel_date():
+    cursor = connection.cursor()
+    cursor.execute("SELECT TOP 1 * FROM tmpCurrentJoelDay")
+    results = build_dict(cursor)
+    return results[0]["CurrentDay"]
+
+def insert_refresh_time():
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO datRefreshTime(RefreshTime) VALUES (?)", datetime.datetime.now())

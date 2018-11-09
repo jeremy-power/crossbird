@@ -10,6 +10,7 @@ from commands import *
 TOKEN = get_token()
 client = discord.Client()
 command_dict = define_commands()
+from threading import Timer
 
 @client.event
 async def on_message(message):
@@ -35,5 +36,7 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
-
+    update_joel_date(date_scrape())
+    t = Timer(60.0, check_joel_day)
+    t.start()
 client.run(TOKEN)

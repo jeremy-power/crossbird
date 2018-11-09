@@ -4,6 +4,7 @@ import os
 import logging
 from db import *
 
+
 def get_token():
     script_path = os.path.dirname(__file__) #<-- absolute dir the script is in
     file_path = "token.txt"
@@ -50,6 +51,13 @@ def date_scrape():
     r = datetime.datetime(int(r[2]),int(r[0]),int(r[1]))
 
     return(r)
+
+def check_joel_day():
+    v = date_scrape()
+    x = get_last_joel_date()
+    if(x != v):
+        insert_refresh_time()
+        update_joel_date(date_scrape())
 
 def time_to_number(time):
     time = time.split(':')
