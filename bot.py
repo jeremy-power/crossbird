@@ -7,10 +7,10 @@ from bot_functions import *
 from db import *
 from messages import *
 from commands import *
+from timer import *
 TOKEN = get_token()
 client = discord.Client()
 command_dict = define_commands()
-from threading import Timer
 
 @client.event
 async def on_message(message):
@@ -37,6 +37,6 @@ async def on_ready():
     print(client.user.id)
     print('------')
     update_joel_date(date_scrape())
-    t = Timer(60.0, check_joel_day)
-    t.start()
+    rt = RepeatedTimer(10, check_joel_day)
+    rt.start()
 client.run(TOKEN)
