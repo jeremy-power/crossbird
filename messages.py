@@ -14,12 +14,15 @@ async def score_error(client, message):
     await asyncio.sleep(3) 
     await client.delete_message(msg)
     
-async def success_message(client, message, time):
+async def success_message(client, message, time, isArchive, streak):
     if time > 60:
         time_string = seconds_to_minutes(time)
     else:
         time_string = str(time)+' seconds.'
-    msg = 'Hello {0.author.mention}, we have logged your score of ' + time_string
+    if isArchive:
+        msg = 'Hello {0.author.mention}, we have logged your score of ' + time_string
+    else:
+        msg = 'Hello {0.author.mention}, we have logged your score of ' + time_string + ', your current streak is '+str(streak)+'!'
     msg = msg.format(message)
     await client.send_message(message.channel, msg)
 
@@ -36,6 +39,14 @@ async def help_message(client, message):
 !where, !nyt        - Provides a link to the New York Times Crosswords. Archive is in bottom right corner.
 !scores             - Creates a table with the scores of the day.
 !joel               - Displays the current crossword day.
+!pb                 - Displays your personal best score.
+```"""
+    msg = msg.format(message)
+    await client.send_message(message.channel, msg)
+
+async def rules_message(client, message):
+    msg = """```nick can use check
+bohan can record 10s scores
 ```"""
     msg = msg.format(message)
     await client.send_message(message.channel, msg)
@@ -56,6 +67,6 @@ async def custom_message(client, message, custom_string):
     await client.send_message(message.channel, msg)
 
 async def time_message(client, message, date):
-    msg = date.strftime("%B %d, %Y")
+    msg = date.strftime("%B %-d, %Y")
     msg = msg.format(message)
     await client.send_message(message.channel, msg)

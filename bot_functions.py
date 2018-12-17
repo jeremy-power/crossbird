@@ -181,3 +181,68 @@ async def build_score_string(client, message, date):
         output_string = output_string[:1997]
         output_string += "```"
     return output_string
+
+async def build_average_string(client, message):
+    average_dict = get_averages()
+    average_list = []
+    count_list = []
+    if not average_dict:
+        return "Sorry, there are no averages??????????"
+    else:
+        output_string = """```
+  Name         |  Average   |   Count
+----------------------------------------"""
+        for average in average_dict:
+            output_string += "\n "
+            output_string += '{:13}'.format(average['Name'][:13])
+            output_string += " |"
+            if average['Average'] is not None:
+                output_string += seconds_to_minutes(average['Average']).center(12, ' ')
+                average_list.append(average['Average'])
+            else:
+                output_string += '{:12}'.format(" ")
+            output_string += "|" 
+            if average['Count'] is not None:
+                output_string += '{:>6}'.format(average['Count'])
+                count_list.append(average['Count'])
+            else:
+                output_string += '{:>6}'.format(" ")
+        if((len(average_list) > 1) or (len(count_list) > 1)):
+            output_string += """ 
+----------------------------------------\n"""
+            output_string += '{:14}'.format(" Average")
+            output_string += " |"
+            if average_list:
+                average_average = int(round(sum(average_list)/len(average_list)))
+                output_string += seconds_to_minutes(average_average).center(12, ' ')
+            else:
+                output_string += '{:12}'.format(" ")
+            output_string += "|" 
+            if count_list:
+                count_average = int(round(sum(count_list)/len(count_list)))
+                output_string += '{:>6}'.format(count_average)
+            else:
+                output_string += '{:>6}'.format(" ")
+        output_string += "```"
+    if len(output_string) > 2000:
+        output_string = output_string[:1997]
+        output_string += "```"
+    return output_string
+
+async def build_personal_best_string(client, message):
+    user_dict = select_user_by_id(message.author.id)
+    user_id = user_dict[0]['UserID']
+    score_dict = get_best_score_by_user(user_id)
+    score = score_dict[0]['Score']
+    date = score_dict[0]['Day']
+    average_dict = get_average_by_day(date)
+    average_score = average_dict[0]['Average']
+    if(score >= 60):
+        output_string = "Your best score is " + seconds_to_minutes(score) + " on " + date.strftime("%B %d, %Y") + ". "
+    else:
+        output_string = "Your best score is " + str(score) + " seconds on " + date.strftime("%B %d, %Y") + ". "
+    if(average_score >= 60):
+        output_string += "The average score that day was " + seconds_to_minutes(average_score) + "."
+    else:
+        output_string += "The average score that day was " + str(average_score) + " seconds."
+    return output_string

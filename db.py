@@ -115,3 +115,21 @@ def get_last_joel_date():
 def insert_refresh_time():
     cursor = connection.cursor()
     cursor.execute("INSERT INTO datRefreshTime(RefreshTime) VALUES (?)", datetime.datetime.now())
+
+def get_averages():
+    cursor = connection.cursor()
+    cursor.execute("exec spGetAveragesByUser")
+    results = build_dict(cursor)
+    return results
+
+def get_best_score_by_user(userID):
+    cursor = connection.cursor()
+    cursor.execute("exec spGetTopScoreByUser ?", userID)
+    results = build_dict(cursor)
+    return results
+
+def get_average_by_day(date):
+    cursor = connection.cursor()
+    cursor.execute("exec spGetAverageByDay ?", date)
+    results = build_dict(cursor)
+    return results

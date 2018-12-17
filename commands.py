@@ -18,8 +18,19 @@ def define_commands():
                     '!yesterday' : display_scores_yesterday,
                     '!streaks' : display_streaks,
                     '!nyt' : display_link,
+                    '!averages' : display_averages,
+                    '!pb' : display_personal_best,
+                    '!rules' : display_rules,
                     '!joel' : display_time}
     return command_dict
+
+async def display_averages(param_array, message, client):
+    average_string = await build_average_string(client, message)
+    await custom_message(client, message, average_string)
+
+async def display_personal_best(param_array, message, client):
+    pb_string = await build_personal_best_string(client, message)
+    await custom_message(client, message, pb_string)
 
 async def display_time(param_array, message, client):
     await time_message(client, message, date_scrape())
@@ -42,6 +53,9 @@ async def display_link(param_array, message, client):
 
 async def display_help(param_array, message, client):
     await help_message(client, message)
+
+async def display_rules(param_array, message, client):
+    await rules_message(client, message)
 
 async def display_streak(param_array, message, client):
     discord_id = message.author.id
@@ -74,7 +88,8 @@ async def create_score_from_message(time, message, client, isArchive):
         time = time_to_number(str(time)) #Calls a function to convert "hh:mm:ss" to integer seconds
         score_entered = enter_score(message.author.id, message.author.display_name,time,date_scrape(), isArchive) #Attempts to actual enter the score into the database
         if score_entered == 1:
-            await success_message(client, message, time)
+            streak = get_streak(message.author.id)
+            await success_message(client, message, time, isArchive, streak)
         else:
             await score_error(client, message)
     except Exception as e:
