@@ -19,7 +19,7 @@ async def success_message(client, message, time, isArchive, streak):
         time_string = seconds_to_minutes(time)
     else:
         time_string = str(time)+' seconds.'
-    if isArchive:
+    if isArchive or streak <= 1:
         msg = 'Hello {0.author.mention}, we have logged your score of ' + time_string
     else:
         msg = 'Hello {0.author.mention}, we have logged your score of ' + time_string + ', your current streak is '+str(streak)+'!'
