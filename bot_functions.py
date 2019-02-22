@@ -3,6 +3,8 @@ __author__ = "Jeremy Power and Logan Groves"
 import os
 import logging
 from db import *
+import requests
+from timer import *
 
 
 def get_token():
@@ -23,6 +25,7 @@ def date_scrape():
         'GET',
         'https://www.nytimes.com/crosswords/game/mini'
     )
+
     r = str(r.data)
     r = r.split('<title data-react-helmet="true">',1)
     r = r[1]
@@ -51,7 +54,10 @@ def date_scrape():
     r = datetime.datetime(int(r[2]),int(r[0]),int(r[1]))
 
     return(r)
-
+    # date_today = datetime.datetime.today()
+    # midnight_today = datetime.datetime(date_today.year, date_today.month, date_today.day, 0, 0, 0)
+    # return midnight_today
+    
 def check_joel_day():
     v = date_scrape()
     x = get_last_joel_date()
@@ -182,6 +188,21 @@ async def build_score_string(client, message, date):
         output_string += "```"
     return output_string
 
+async def build_top_scores_string(client, message):
+    top_score_dict = get_top_scores()
+    output_string = ""
+    if top_score_dict:
+        output_string += """```
+  Name         | Top Scores
+----------------------------"""
+        for top_score in top_score_dict:
+            output_string += "\n "
+            output_string += '{:13}'.format(top_score['DiscordName'][:13])
+            output_string += " |"
+            output_string += '{:>6}'.format(str(top_score['TopScores']))
+        output_string += "```"
+    return output_string
+
 async def build_average_string(client, message):
     average_dict = get_averages()
     average_list = []
@@ -246,3 +267,19 @@ async def build_personal_best_string(client, message):
     else:
         output_string += "The average score that day was " + str(average_score) + " seconds."
     return output_string
+
+# async def play_trivia(question_amount, message, client):
+#     request_string = 'https://opentdb.com/api.php?amount=' + question_amount
+#     r = requests.get(request_string)
+#     questions = r.json()
+#     if(questions['response_code'] == 0):
+#         questions = questions['results']
+#         start_point = 0
+#         rt = RepeatedTimer(10, print_question(questions, start_point))
+#         rt.start()
+#         await client.send_message(message.channel, questions[0]['question'])
+
+# async def print_question(questions, start_point):
+#     if(len(questions) < start_point):
+#         print(questions[start_point])
+#         start_point += 1

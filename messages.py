@@ -18,9 +18,9 @@ async def success_message(client, message, time, isArchive, streak):
     if time > 60:
         time_string = seconds_to_minutes(time)
     else:
-        time_string = str(time)+' seconds.'
+        time_string = str(time)+' seconds'
     if isArchive or streak <= 1:
-        msg = 'Hello {0.author.mention}, we have logged your score of ' + time_string
+        msg = 'Hello {0.author.mention}, we have logged your score of ' + time_string + '.'
     else:
         msg = 'Hello {0.author.mention}, we have logged your score of ' + time_string + ', your current streak is '+str(streak)+'!'
     msg = msg.format(message)
@@ -39,6 +39,7 @@ async def help_message(client, message):
 !where, !nyt        - Provides a link to the New York Times Crosswords. Archive is in bottom right corner.
 !scores             - Creates a table with the scores of the day.
 !joel               - Displays the current crossword day.
+!topscores          - Displays how many times each person (not nick) had the #1 score for the day.
 !pb                 - Displays your personal best score.
 ```"""
     msg = msg.format(message)

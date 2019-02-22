@@ -21,12 +21,22 @@ def define_commands():
                     '!averages' : display_averages,
                     '!pb' : display_personal_best,
                     '!rules' : display_rules,
+                    # '!trivia' : start_trivia,
+                    '!topscores' : display_top_scores,
                     '!joel' : display_time}
     return command_dict
+    
+# async def start_trivia(param_array, message, client):
+#     question_amount = param_array[0]
+#     await play_trivia(question_amount, message, client)
 
 async def display_averages(param_array, message, client):
     average_string = await build_average_string(client, message)
     await custom_message(client, message, average_string)
+
+async def display_top_scores(param_array, message, client):
+    top_scores_string = await build_top_scores_string(client, message)
+    await custom_message(client, message, top_scores_string)
 
 async def display_personal_best(param_array, message, client):
     pb_string = await build_personal_best_string(client, message)

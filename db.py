@@ -121,6 +121,12 @@ def get_averages():
     cursor.execute("exec spGetAveragesByUser")
     results = build_dict(cursor)
     return results
+    
+def get_top_scores():
+    cursor = connection.cursor()
+    cursor.execute("exec spGetTopScores")
+    results = build_dict(cursor)
+    return results
 
 def get_best_score_by_user(userID):
     cursor = connection.cursor()

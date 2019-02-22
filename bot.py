@@ -18,6 +18,7 @@ async def on_message(message):
     if message.author == client.user:
         return
     # breaks the user's message into parts
+    message.content = message.content.replace(',', '')
     command = message.content.split(" ")[0]
     command_params = message.content.split(" ")[1:]
 

@@ -1,13 +1,6 @@
+import datetime
 
-def time_to_number(time):
-    time = time.split(':')
-    time_len = len(time)
-    if time_len == 1:
-        time = int(time[0])
-    elif time_len == 2:
-        time = int(time[0])*60+int(time[1])
-    elif time_len == 3:
-        time = int(time[0])*3600+int(time[1])*60+int(time[2])
-    else:
-        time = -1
-    return(time)
+date_today = datetime.datetime.today()
+midnight_today = datetime.datetime(date_today.year, date_today.month, date_today.day, 0, 0, 0)
+
+print(midnight_today)
