@@ -1,13 +1,13 @@
 __author__ = "Jeremy Power and Logan Groves"
 
 # Work with Python 3.6
+import discord
 import logging
 from bot_functions import *
 from db import *
 from messages import *
 from commands import *
 from timer import *
-import discord
 TOKEN = process.env.BOT_TOKEN
 client = discord.Client()
 command_dict = define_commands()
