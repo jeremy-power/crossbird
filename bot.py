@@ -8,7 +8,7 @@ from db import *
 from messages import *
 from commands import *
 from timer import *
-TOKEN = get_token()
+TOKEN = process.env.BOT_TOKEN
 client = discord.Client()
 command_dict = define_commands()
 

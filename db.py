@@ -3,13 +3,7 @@ import datetime
 import os
 
 def get_db_string():
-    script_path = os.path.dirname(__file__) #<-- absolute dir the script is in
-    file_path = "db.txt"
-    full_file_path = os.path.join(script_path, file_path)
-    with open(full_file_path) as f:
-        read_data = f.read()
-    f.closed
-    return read_data
+    return process.env.CSTRING
 
 def get_connection():
     return pyodbc.connect(get_db_string(), autocommit=True)
