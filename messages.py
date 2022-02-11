@@ -64,7 +64,7 @@ bohan can record 10s scores
     msg = await message.channel.send(msg)
 
 async def where_message(client, message):
-    msg = 'https://www.nytimes.com/crosswords https://www.nytimes.com/games/wordle/index.html'
+    msg = 'https://www.nytimes.com/crosswords\nhttps://www.nytimes.com/games/wordle/index.html'
     msg = msg.format(message)
     msg = await message.channel.send(msg)
 

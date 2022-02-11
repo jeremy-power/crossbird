@@ -58,7 +58,7 @@ def create_wordle_score(discord_id, score, date):
     
 def create_user(discord_id, discord_name):
     cursor = connection.cursor()
-    cursor.execute("INSERT INTO datUsers(DiscordID, DiscordName) VALUES (" + discord_id + ", '" + discord_name +"');")
+    cursor.execute("INSERT INTO datUsers(DiscordID, DiscordName) VALUES (" + str(discord_id) + ", '" + discord_name +"');")
     connection.commit()
 
 def update_date_to_now(discord_id, isArchive):
