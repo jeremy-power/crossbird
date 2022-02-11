@@ -1,4 +1,7 @@
 ALTER TABLE crossnerd.dbo.datUsers
+ADD WordleStreak int NOT NULL
+DEFAULT 1;
+ALTER TABLE crossnerd.dbo.datUsers
 ADD LastWordle DATETIME NOT NULL
 DEFAULT '1900-01-01 00:00:00';
 CREATE TABLE crossnerd.dbo.WordleScores (
