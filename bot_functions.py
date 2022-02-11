@@ -99,9 +99,12 @@ def enter_wordle_score(discord_id, discord_name, score, date):
     user = get_user(discord_id, discord_name)
     if(len(user) != 0):
         if not (date_compare(get_last_wordle_date(discord_id), date)):
-            check_wordle_streak(discord_id, date)
-            create_wordle_score(discord_id, score, date)
-            return 1
+            if (int(score) <=6 and int(score) >=1):
+                check_wordle_streak(discord_id, date)
+                create_wordle_score(discord_id, score, date)
+                return 1
+            else:
+                return 0
         else:
             return 0
 

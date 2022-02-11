@@ -112,7 +112,7 @@ def update_streak(discord_id, isContinued):
 def update_wordle_streak(discord_id, isContinued):
     cursor = connection.cursor()
     if isContinued:
-        cursor.execute("UPDATE datUsers SET WordleStreak = WordleStreakStreak + 1 WHERE DiscordID = ?", discord_id)
+        cursor.execute("UPDATE datUsers SET WordleStreak = WordleStreak + 1 WHERE DiscordID = ?", discord_id)
     else:
         cursor.execute("UPDATE datUsers SET WordleStreak = 1 WHERE DiscordID = ?", discord_id)
 
