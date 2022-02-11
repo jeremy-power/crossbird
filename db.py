@@ -51,7 +51,7 @@ def create_wordle_score(discord_id, score, date):
     user = select_user_by_id(discord_id)
     user_id = user[0]['UserID']
     cursor = connection.cursor()
-    cursor.execute("INSERT INTO datScores(Score, UserID, Day, DateRecorded) VALUES (?, ?, ?, ?)",
+    cursor.execute("INSERT INTO WordleScores(Score, UserID, Day, DateRecorded) VALUES (?, ?, ?, ?)",
                   (score, user_id, date, datetime.datetime.now()))
     cursor.commit()
     update_wordle_date_to_now(discord_id)
@@ -133,6 +133,12 @@ def get_wordle_streak(discord_id):
 def get_scores_for_day(date):
     cursor = connection.cursor()
     cursor.execute("exec sp_BuildDateView ?", date)
+    results = build_dict(cursor)
+    return results
+
+def get_wordles_for_day(date):
+    cursor = connection.cursor()
+    cursor.execute("exec spGetWordleScores ?", date)
     results = build_dict(cursor)
     return results
 

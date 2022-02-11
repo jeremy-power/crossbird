@@ -17,6 +17,7 @@ def define_commands():
                     '!help' : display_help,
                     '!where' : display_link,
                     '!scores' : display_scores_today,
+                    '!wscores' : display_wordles_today,
                     '!yesterday' : display_scores_yesterday,
                     '!streaks' : display_streaks,
                     '!nyt' : display_link,
@@ -50,6 +51,10 @@ async def display_time(param_array, message, client):
 
 async def display_scores_today(param_array, message, client):
     score_string = await build_score_string(client, message, date_scrape())
+    await custom_message(client, message, score_string)
+
+async def display_wordles_today(param_array, message, client):
+    score_string = await build_wordle_string(client, message, get_wordle_date())
     await custom_message(client, message, score_string)
 
 async def display_streaks(param_array, message, client):

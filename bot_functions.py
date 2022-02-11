@@ -168,7 +168,35 @@ async def build_streak_string(client, message):
         output_string += "```"
     return output_string
 
-
+async def build_wordle_string(client, message, date):
+    score_dict = get_wordles_for_day(date)
+    score_list = []
+    if not score_dict:
+        return "Sorry, there are no scores yet today!"
+    else:
+        output_string = """```
+  Name         |   Score
+-----------------------------"""
+        for score in score_dict:
+            output_string += "\n "
+            output_string += '{:13}'.format(score['Name'][:13])
+            output_string += " |"
+            output_string += str(score['Score']).center(12, ' ')
+            score_list.append(score['Score'])
+        if(len(score_list) > 1):
+            output_string += """ 
+-----------------------------\n"""
+            output_string += '{:14}'.format(" Average")
+            output_string += " |"
+            score_average = round(sum(score_list)/len(score_list),3)
+            score_average = str(score_average)
+            output_string += score_average.center(12, ' ')
+        
+        output_string += "```"
+        if len(output_string) > 2000:
+            output_string = output_string[:1997]
+            output_string += "```"
+        return output_string
 async def build_score_string(client, message, date):
     score_dict = get_scores_for_day(date)
     cscore_list = []

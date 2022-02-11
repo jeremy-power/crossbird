@@ -9,6 +9,16 @@ CREATE TABLE crossnerd.dbo.WordleScores (
 	UserID int NOT NULL,
 	[Day] datetime DEFAULT getdate() NOT NULL,
 	DateRecorded datetime DEFAULT getdate() NOT NULL,
+	Score int NOT NULL,
 	CONSTRAINT WordleScores_FK FOREIGN KEY (UserID) REFERENCES crossnerd.dbo.datUsers(UserID)
 );
+CREATE PROCEDURE dbo.spGetWordleScores @WordleDay datetime
+AS 
+BEGIN
+	SET NOCOUNT ON
+	
+	SELECT datUsers.DiscordName as Name, WordleScores.Score as Score FROM WordleScores
+	LEFT JOIN datUsers ON WordleScores.UserID = datUsers.UserID
+	WHERE Day = @WordleDay
+END
 GO

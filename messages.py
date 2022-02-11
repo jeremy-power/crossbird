@@ -46,7 +46,8 @@ async def help_message(client, message):
 !wordle, !w x       - Saves your score for today\'s Wordle.
 !streak             - Displays your current streak of completing the regular crossword on consecutive days.
 !where, !nyt        - Provides a link to the New York Times Crosswords. Archive is in bottom right corner.
-!scores             - Creates a table with the scores of the day.
+!scores             - Creates a table with the crossword scores of the day.
+!wscores             - Creates a table with the wordle scores of the day.
 !joel               - Displays the current crossword day.
 !topscores          - Displays how many times each person (not nick) had the #1 score for the day.
 !pb                 - Displays your personal best score.
