@@ -9,10 +9,12 @@ def define_commands():
                     '!c' : enter_crossword_command,
                     '!archive' : enter_archive_command,
                     '!a' : enter_archive_command,
+                    '!wordle' : enter_wordle_command,
+                    '!w' : enter_wordle_command,
                     '!both' : enter_both_command,
                     '!b' : enter_both_command,
                     '!streak' : display_streak,
-                    '!how' : display_help,
+                    '!help' : display_help,
                     '!where' : display_link,
                     '!scores' : display_scores_today,
                     '!yesterday' : display_scores_yesterday,
@@ -83,6 +85,11 @@ async def enter_archive_command(param_array, message, client):
     #implement validation on time here
     await create_score_from_message(time, message, client, True)
 
+async def enter_wordle_command(param_array, message, client):
+    score = param_array[0]
+    await create_wordle_score_from_message(score, message, client)
+    #implement validation on time here
+
 async def enter_both_command(param_array, message, client):
     try:
         time = param_array[0]
@@ -100,6 +107,19 @@ async def create_score_from_message(time, message, client, isArchive):
         if score_entered == 1:
             streak = get_streak(message.author.id)
             await success_message(client, message, time, isArchive, streak)
+        else:
+            await score_error(client, message)
+    except Exception as e:
+        logging.warning(e)
+        await output_error(client, message)
+
+
+async def create_wordle_score_from_message(score, message, client):
+    try:
+        score_entered = enter_wordle_score(message.author.id, message.author.display_name, score, get_wordle_date())
+        if score_entered == 1:
+            streak = get_wordle_streak(message.author.id)
+            await wordle_success_message(client, message, score, streak)
         else:
             await score_error(client, message)
     except Exception as e:

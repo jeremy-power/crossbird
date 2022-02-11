@@ -16,6 +16,11 @@ def get_token():
     f.closed
     return read_data
 
+def get_wordle_date():
+     date_today = datetime.datetime.today()
+     midnight_today = datetime.datetime(date_today.year, date_today.month, date_today.day, 0, 0, 0)
+     return midnight_today
+
 def date_scrape():
     import datetime
     import urllib3
@@ -78,10 +83,7 @@ def time_to_number(time):
         time = -1
     return(time)
 
-
-def enter_score(discord_id, discord_name, score, date, isArchive):
-    #find the user by their discord ID
-    current_crossword_date = date_scrape()
+def get_user(discord_id, discord_name):
     user = select_user_by_id(discord_id)
     #if user doesn't exist yet, create one
     if len(user) == 0:
@@ -91,6 +93,23 @@ def enter_score(discord_id, discord_name, score, date, isArchive):
         update_name(discord_id, discord_name)
     #make sure user exists now
     user = select_user_by_id(discord_id)
+    return user
+
+def enter_wordle_score(discord_id, discord_name, score, date):
+    user = get_user(discord_id, discord_name)
+    if(len(user) != 0):
+        if not (date_compare(get_last_wordle_date(discord_id), date)):
+            check_wordle_streak(discord_id, date)
+            create_wordle_score(discord_id, score, date)
+            return 1
+        else:
+            return 0
+
+def enter_score(discord_id, discord_name, score, date, isArchive):
+    #find the user by their discord ID
+
+    user = get_user(discord_id, discord_name)
+    current_crossword_date = date_scrape()
     if len(user) != 0:
         #if it does, add the score
         if(isArchive):
@@ -115,6 +134,13 @@ def check_streak(discord_id, current_crossword_date):
         update_streak(discord_id, True)
     else:
         update_streak(discord_id, False)
+
+def check_wordle_streak(discord_id, current_date):
+    last_date = get_last_wordle_date(discord_id)
+    if (last_date.date() == (current_date - datetime.timedelta(days=1)).date()):
+        update_wordle_streak(discord_id, True)
+    else:
+        update_wordle_streak(discord_id, False)
 
 def seconds_to_minutes(seconds):
     minutes = divmod(seconds, 60)

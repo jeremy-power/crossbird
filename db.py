@@ -46,17 +46,32 @@ def create_score(discord_id, score, date, isArchive):
                   (score, user_id, date, datetime.datetime.now(), int(isArchive)))
     cursor.commit()
     update_date_to_now(discord_id, isArchive)
+
+def create_wordle_score(discord_id, score, date):
+    user = select_user_by_id(discord_id)
+    user_id = user[0]['UserID']
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO datScores(Score, UserID, Day, DateRecorded) VALUES (?, ?, ?, ?)",
+                  (score, user_id, date, datetime.datetime.now()))
+    cursor.commit()
+    update_wordle_date_to_now(discord_id)
     
 def create_user(discord_id, discord_name):
     cursor = connection.cursor()
     cursor.execute("INSERT INTO datUsers(DiscordID, DiscordName) VALUES (" + discord_id + ", '" + discord_name +"');")
     connection.commit()
+
 def update_date_to_now(discord_id, isArchive):
     cursor = connection.cursor()
     if(isArchive):
         cursor.execute("UPDATE datUsers SET LastArchive = ? WHERE DiscordID = ?", (datetime.datetime.now(), discord_id))
     else:
         cursor.execute("UPDATE datUsers SET LastCrossword = ? WHERE DiscordID = ?", (datetime.datetime.now(), discord_id))
+    connection.commit()
+
+def update_wordle_date_to_now(discord_id):
+    cursor = connection.cursor()
+    cursor.execute("UPDATE datUsers SET LastWordle = ? WHERE DiscordID = ?", (datetime.datetime.now(), discord_id))
     connection.commit()
 
 def get_last_date(discord_id, isArchive):
@@ -69,6 +84,17 @@ def get_last_date(discord_id, isArchive):
         return datetime.datetime(1900,1,1)
     else:
         return results[0]['Day']
+
+def get_last_wordle_date(discord_id):
+    user = select_user_by_id(discord_id)
+    user_id = user[0]['UserID']
+    cursor = connection.cursor()
+    cursor.execute("SELECT TOP 1 LastWordle FROM datUsers WHERE UserID = ?", user_id)
+    results = build_dict(cursor)
+    if len(results) == 0:
+        return datetime.datetime(1900,1,1)
+    else:
+        return results[0]['LastWordle']
 
 def date_compare(date1, date2):
     if(date1.date() == date2.date()):
@@ -83,11 +109,25 @@ def update_streak(discord_id, isContinued):
     else:
         cursor.execute("UPDATE datUsers SET Streak = 1 WHERE DiscordID = ?", discord_id)
 
+def update_wordle_streak(discord_id, isContinued):
+    cursor = connection.cursor()
+    if isContinued:
+        cursor.execute("UPDATE datUsers SET WordleStreak = WordleStreakStreak + 1 WHERE DiscordID = ?", discord_id)
+    else:
+        cursor.execute("UPDATE datUsers SET WordleStreak = 1 WHERE DiscordID = ?", discord_id)
+
 def get_streak(discord_id):
     cursor = connection.cursor()
     cursor.execute("SELECT TOP 1 * FROM datUsers WHERE DiscordID = ?", discord_id)
     results = build_dict(cursor)
     user_streak = results[0]['Streak']
+    return user_streak
+
+def get_wordle_streak(discord_id):
+    cursor = connection.cursor()
+    cursor.execute("SELECT TOP 1 * FROM datUsers WHERE DiscordID = ?", discord_id)
+    results = build_dict(cursor)
+    user_streak = results[0]['WordleStreak']
     return user_streak
 
 def get_scores_for_day(date):
