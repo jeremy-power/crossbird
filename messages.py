@@ -20,17 +20,17 @@ async def success_message(client, message, time, isArchive, streak):
     else:
         time_string = str(time)+' seconds'
     if isArchive or streak <= 1:
-        msg = 'Hello {0.author.mention}, we have logged your score of ' + time_string + '.'
+        msg = 'Hello {0.author.mention}, we have logged your crossword score of ' + time_string + '.'
     else:
-        msg = 'Hello {0.author.mention}, we have logged your score of ' + time_string + ', your current streak is '+str(streak)+'!'
+        msg = 'Hello {0.author.mention}, we have logged your crossword score of ' + time_string + ', your current streak is '+str(streak)+'!'
     msg = msg.format(message)
     msg = await message.channel.send(msg)
 
 async def wordle_success_message(client, message, score, streak):
     if streak <= 1:
-        msg = 'Hello {0.author.mention}, we have logged your score of ' + score + ' guesses.'
+        msg = 'Hello {0.author.mention}, we have logged your Wordle score of ' + score + ' guesses.'
     else:
-        msg = 'Hello {0.author.mention}, we have logged your score of ' + score + ' guesses, your current streak is ' + str(streak) + '!'
+        msg = 'Hello {0.author.mention}, we have logged your Wordle score of ' + score + ' guesses, your current streak is ' + str(streak) + '!'
     msg = msg.format(message)
     msg = await message.channel.send(msg)
 
