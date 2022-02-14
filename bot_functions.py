@@ -2,9 +2,11 @@ __author__ = "Jeremy Power and Logan Groves"
 
 import os
 import logging
-from db import *
 import requests
+from db import *
 from timer import *
+import datetime
+import urllib3
 
 
 def get_token():
@@ -22,8 +24,6 @@ def get_wordle_date():
      return midnight_today
 
 def date_scrape():
-    import datetime
-    import urllib3
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     http = urllib3.PoolManager()
     r = http.request(
@@ -260,8 +260,13 @@ async def build_top_scores_string(client, message):
         output_string += "```"
     return output_string
 
-async def build_average_string(client, message):
-    average_dict = get_averages()
+async def build_crossword_averages(client, message):
+    return await build_average_string(client, message, get_averages(), True)
+
+async def build_wordle_averages(client, message):
+    return await build_average_string(client, message, get_wordle_averages(), False)
+
+async def build_average_string(client, message, average_dict, isCrossword):
     average_list = []
     count_list = []
     if not average_dict:
@@ -275,7 +280,10 @@ async def build_average_string(client, message):
             output_string += '{:13}'.format(average['Name'][:13])
             output_string += " |"
             if average['Average'] is not None:
-                output_string += seconds_to_minutes(average['Average']).center(12, ' ')
+                if isCrossword:
+                    output_string += seconds_to_minutes(average['Average']).center(12, ' ')
+                else:
+                    output_string += str(average['Average']).center(12, ' ')
                 average_list.append(average['Average'])
             else:
                 output_string += '{:12}'.format(" ")
@@ -292,7 +300,10 @@ async def build_average_string(client, message):
             output_string += " |"
             if average_list:
                 average_average = int(round(sum(average_list)/len(average_list)))
-                output_string += seconds_to_minutes(average_average).center(12, ' ')
+                if isCrossword:
+                    output_string += seconds_to_minutes(average_average).center(12, ' ')
+                else:
+                    output_string += str(average_average).center(12, ' ')
             else:
                 output_string += '{:12}'.format(" ")
             output_string += "|" 

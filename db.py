@@ -167,6 +167,12 @@ def get_averages():
     cursor.execute("exec spGetAveragesByUser")
     results = build_dict(cursor)
     return results
+
+def get_wordle_averages():
+    cursor = connection.cursor()
+    cursor.execute("exec spGetWordleAverages")
+    results = build_dict(cursor)
+    return results
     
 def get_top_scores():
     cursor = connection.cursor()

@@ -22,6 +22,7 @@ def define_commands():
                     '!streaks' : display_streaks,
                     '!nyt' : display_link,
                     '!averages' : display_averages,
+                    '!waverages' : display_wordle_averages,
                     '!pb' : display_personal_best,
                     '!rules' : display_rules,
                     # '!trivia' : start_trivia,
@@ -34,7 +35,11 @@ def define_commands():
 #     await play_trivia(question_amount, message, client)
 
 async def display_averages(param_array, message, client):
-    average_string = await build_average_string(client, message)
+    average_string = await build_crossword_averages(client, message)
+    await custom_message(client, message, average_string)
+
+async def display_wordle_averages(param_array, message, client):
+    average_string = await build_wordle_averages(client, message)
     await custom_message(client, message, average_string)
 
 async def display_top_scores(param_array, message, client):

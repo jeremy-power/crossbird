@@ -52,6 +52,7 @@ async def help_message(client, message):
 !topscores          - Displays how many times each person (not nick) had the #1 score for the day.
 !pb                 - Displays your personal best score.
 !averages           - Displays average score and total number of crosswords.
+!waverages           - Displays average score and total number of crosswords.
 ```"""
     msg = msg.format(message)
     msg = await message.channel.send(msg)

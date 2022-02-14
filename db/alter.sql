@@ -20,5 +20,6 @@ BEGIN
 	SELECT datUsers.DiscordName as Name, WordleScores.Score as Score FROM WordleScores
 	LEFT JOIN datUsers ON WordleScores.UserID = datUsers.UserID
 	WHERE Day = @WordleDay
+	ORDER BY Score ASC;
 END
 GO
