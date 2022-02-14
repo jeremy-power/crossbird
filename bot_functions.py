@@ -7,6 +7,7 @@ from db import *
 from timer import *
 import datetime
 import urllib3
+from decimal import Decimal
 
 
 def get_token():
@@ -283,7 +284,7 @@ async def build_average_string(client, message, average_dict, isCrossword):
                 if isCrossword:
                     output_string += seconds_to_minutes(average['Average']).center(12, ' ')
                 else:
-                    output_string += str(average['Average']).center(12, ' ')
+                    output_string += str(round(average['Average'], 2)).strip("0").center(12, ' ')
                 average_list.append(average['Average'])
             else:
                 output_string += '{:12}'.format(" ")
@@ -301,9 +302,11 @@ async def build_average_string(client, message, average_dict, isCrossword):
             if average_list:
                 average_average = int(round(sum(average_list)/len(average_list)))
                 if isCrossword:
+                    average_average = int(round(sum(average_list)/len(average_list)))
                     output_string += seconds_to_minutes(average_average).center(12, ' ')
                 else:
-                    output_string += str(average_average).center(12, ' ')
+                    average_average = round(sum(average_list)/len(average_list), 2)
+                    output_string += str(average_average).strip("0").center(12, ' ')
             else:
                 output_string += '{:12}'.format(" ")
             output_string += "|" 

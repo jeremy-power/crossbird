@@ -9,7 +9,7 @@ BEGIN
     SELECT DiscordName AS Name, ROUND(AVG(CAST(Score AS FLOAT)),2) AS Average, Count(Score) As Count FROM WordleScores
     LEFT JOIN datUsers ON WordleScores.UserID = datUsers.UserID GROUP BY DiscordName ORDER BY Average
 END
-ALTER PROCEDURE dbo.spGetWordleScores @WordleDay datetime
+ALTER PROCEDURE [dbo].[spGetWordleScores] @WordleDay datetime
 AS 
 BEGIN
 	SET NOCOUNT ON
