@@ -9,35 +9,23 @@ from messages import *
 from commands import *
 from timer import *
 TOKEN = get_token()
-client = discord.Client()
-command_dict = define_commands()
+intents = discord.Intents.default()
+intents.message_content = True
 
-@client.event
-async def on_message(message):
-    # we do not want the bot to reply to itself
-    if message.author == client.user:
-        return
-    # breaks the user's message into parts
-    message.content = message.content.replace(',', '')
-    command = message.content.split(" ")[0]
-    command_params = message.content.split(" ")[1:]
+class aclient(discord.Client):
+    def __init__(self):
+        super().__init__(intents=discord.Intents.default())
+        self.synced = False
 
-    if(command.startswith('!')):
-        try:
-            await command_dict[command](command_params, message, client)
-        except KeyError as e:
-            pass
-        except Exception as e:
-            await output_error(client, message)
-            logging.warning(e)
+    async def on_ready(self):
+        await self.wait_until_ready()
+        if not self.synced:
+            await tree.sync()
+            self.synced = True
+        print(f"We have logged in as {self.user}.")
 
-@client.event
-async def on_ready():
-    print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
-    print('------')
-    # update_joel_date(date_scrape())
-    # rt = RepeatedTimer(10, check_joel_day)
-    # rt.start()
+client = aclient()
+tree = discord.app_commands.CommandTree(client)
+command_dict = define_commands(tree, discord.Interaction)
+
 client.run(TOKEN)

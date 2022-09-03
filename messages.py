@@ -1,18 +1,12 @@
 import asyncio
 from bot_functions import seconds_to_minutes
-async def output_error(client, message):
-    msg = "Hello {0.author.mention}, I didn't understand that.".format(message)
-    msg = msg.format(message)
-    msg = await message.channel.send(msg)
-    await asyncio.sleep(3) 
-    await msg.delete()
+async def output_error(interaction):
+    msg = f"Hello {interaction.user.mention}, I didn't understand that."
+    await interaction.response.send_message(msg, ephemeral=True)
     
-async def score_error(client, message):
-    msg = 'Hello {0.author.mention}, something went wrong and we could not record your score.'
-    msg = msg.format(message)
-    msg = await message.channel.send(msg)
-    await asyncio.sleep(3) 
-    await msg.delete()
+async def score_error(interaction):
+    msg = f'Hello {interaction.user.mention}, something went wrong and we could not record your score.'
+    await interaction.response.send_message(msg, ephemeral=True)
     
 async def success_message(client, message, time, isArchive, streak):
     if time > 60:
@@ -26,13 +20,12 @@ async def success_message(client, message, time, isArchive, streak):
     msg = msg.format(message)
     msg = await message.channel.send(msg)
 
-async def wordle_success_message(client, message, score, streak):
+async def wordle_success_message(interaction, score, streak):
     if streak <= 1:
-        msg = 'Hello {0.author.mention}, we have logged your Wordle score of ' + score + ' guesses.'
+        msg = f'Hello {interaction.user.mention}, we have logged your Wordle score of {score} guesses.'
     else:
-        msg = 'Hello {0.author.mention}, we have logged your Wordle score of ' + score + ' guesses, your current streak is ' + str(streak) + '!'
-    msg = msg.format(message)
-    msg = await message.channel.send(msg)
+        msg = f'Hello {interaction.user.mention}, we have logged your Wordle score of {score} guesses, your current streak is ' + str(streak) + '!'
+    await interaction.response.send_message(msg)
 
 async def streak_message(client, message, streak):
     msg = '{0.author.mention}, your current streak is '+str(streak)+'!'
